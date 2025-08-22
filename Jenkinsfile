@@ -1,23 +1,33 @@
 pipeline {
     agent any
+
+    tools {
+        maven 'Maven 3.8.6'   // Use exact name as in Jenkins
+        jdk 'JDK 21'          // Use exact name as in Jenkins
+    }
+
     stages {
-        stage('Checkout') {
-            
-        }
+    
+
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
+
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
-        stage('Run') {
-            steps {
-                echo 'Spring Boot app build completed!'
-            }
+    }
+
+    post {
+        failure {
+            echo 'Build or tests failed.'
+        }
+        success {
+            echo 'Build and tests succeeded.'
         }
     }
 }
